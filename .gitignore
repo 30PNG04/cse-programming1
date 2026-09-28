@@ -68,6 +68,7 @@ lecture08-function-pointers/preprocessor/platform
 lecture08-function-pointers/strings/my_string
 lecture08-function-pointers/strings/string_basics
 lecture08-function-pointers/strings/string_functions
+build/
 
 # Lab assignments
 labs/lab01/lab01

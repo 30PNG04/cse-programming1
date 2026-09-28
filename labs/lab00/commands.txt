@@ -1,0 +1,21 @@
+    1  cd ~/prog1
+    2  mkdir -p ./lab00/practice/{src,build,docs}
+    3  cd lab00/
+    4  cd practice/
+    5  echo -e "Programming 1\nLab 0" > ./docs/readme.txt
+    6  cat -n ./docs/readme.txt 
+    7  cp ./docs/readme.txt ./src/notes.txt
+    8  mv ./src/notes.txt ./src/info.txt
+    9  ls -R ./ > ./listing.txt
+   10  find ~/prog1 -type f -name "*.txt"
+   11  grep -rn "Lab" ./
+   13  find /usr/include -maxdepth 1 -type f -name "*.h" | wc -l
+   14  rm -rf ./build/
+   15  cd ..
+   16  mv ./practice ./practice_done
+   22  mkdir -p ./project/{src,build}
+   23  vim ./project/src/hello.c
+   24  gcc ./project/src/hello.c -o ./project/build/hello
+   25  cd project/
+   26  ./build/hello > output.txt
+   27  ls -l ./build/hello 
