@@ -32,28 +32,37 @@ static int same_array(const int a[], const int b[], int n) {
 // 2.1 Maximum value of the array (n >= 1)
 int array_max(int a[], int n) {
     // TODO: note that the array may contain only negative numbers
-    (void)a; (void)n;
-    return -1;
+    int buf = a[0];
+    for (int i = 1; i < n; i++) {buf = buf < a[i] ? a[i] : buf;}
+    return buf;
 }
 
 // 2.2 Arithmetic mean (n >= 1)
 double array_mean(int a[], int n) {
     // TODO: beware of integer division
-    (void)a; (void)n;
-    return -1;
+    double buf = 0;
+    for (int i = 0; i < n; i++) {buf += a[i];}
+    return buf / (double) n;
 }
 
 // 2.3 Reverse the array in place: {1, 2, 3} -> {3, 2, 1}
 void reverse_array(int a[], int n) {
     // TODO: swap a[i] and a[n - 1 - i]; only go up to the middle of the array
-    (void)a; (void)n;
+    for (int i = 0, j = n - 1; i < j; i++, j--) {
+        a[i] ^= a[j];
+        a[j] ^= a[i];
+        a[i] ^= a[j];
+    }
 }
 
 // 2.4 Number of occurrences of value in the array
 int count_value(int a[], int n, int value) {
     // TODO
-    (void)a; (void)n; (void)value;
-    return -1;
+    int buf = 0;
+    for (int i = 0; i < n; i++) {
+        if (a[i] == value) buf++;
+    }
+    return buf;
 }
 
 // 2.5 Max along an axis (Lecture 3):
@@ -61,41 +70,69 @@ int count_value(int a[], int n, int value) {
 //   axis = 1: max of each ROW -> out has rows elements
 void max_2d(int a[][COLS], int rows, int axis, int out[]) {
     // TODO
-    (void)a; (void)rows; (void)axis; (void)out;
+    int outerLoopMax = axis ? rows : COLS;
+    int innerLoopMax = axis ? COLS : rows; 
+    int buf = a[0][0];
+
+    for (int i = 0; i < outerLoopMax; i++) {
+        buf = axis ? a[i][0] : a[0][i];
+        for (int j = 0; j < innerLoopMax; j++) {
+            if (axis) buf = a[i][j] > buf ? a[i][j] : buf;
+            else buf = a[j][i] > buf ? a[j][i] : buf;
+        }
+        out[i] = buf;
+    }
 }
 
 // 2.6 Matrix multiplication: C = A x B, where A is 2x3, B is 3x2, C is 2x2
 void matmul(int A[2][3], int B[3][2], int C[2][2]) {
     // TODO: C[i][j] = sum over k of A[i][k] * B[k][j]
-    (void)A; (void)B; (void)C;
+    for (int i = 0; i < 2; i++) {
+        for (int j = 0; j < 2; j++){
+            for (int k = 0; k < 3; k++) {
+                C[i][j] += A[i][k] * B[k][j];
+            }
+        }
+    }
 }
 
 // 2.7 Implement strlen yourself (do NOT use <string.h>)
 int my_strlen(const char s[]) {
     // TODO: count until you reach '\0'
-    (void)s;
-    return -1;
+    int buf = 0;
+    for (; *s != '\0'; s++, buf++) {}
+    return buf; 
 }
 
 // 2.8 Convert lowercase letters to uppercase in place, leaving other characters unchanged
 void to_upper(char s[]) {
     // TODO: 'a' - 'A' == 32 (ASCII table)
-    (void)s;
+    for (;*s != '\0'; s++)
+        *s -= (97 <= *s && *s <= 122) ? 32 : 0;
 }
 
 // 2.9 Return 1 if s is a palindrome ("racecar", "abba", ""), otherwise 0
 int is_palindrome(const char s[]) {
-    // TODO
-    (void)s;
-    return -1;
+    int len = my_strlen(s);
+    for (int i = 0, j = len - 1; i < j; i++, j--)
+        if (s[i] != s[j]) return 0;
+    return 1;
 }
 
 // 2.10 Count words; words are separated by one or more spaces ' '
 //      "  hello   world " -> 2
 int count_words(const char s[]) {
     // TODO: count the "word starts": a non-' ' character preceded by ' ' (or the start of the string)
-    (void)s;
-    return -1;
+    int buf = 0, flag = 1;
+    for (; *s != '\0'; s++) {
+        if (*s == ' ') flag = 1;
+        else if (flag) {
+            flag = 0;
+            buf++;
+        }
+    }
+    
+    return buf;
 }
 
 int main() {

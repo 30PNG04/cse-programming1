@@ -3,10 +3,12 @@
 // Use gdb or VS Code (breakpoints, step, watch) to find them; do NOT add printf.
 //
 // Record the bugs you find:
-//   Bug 1: line ..., symptom ..., fix ...
-//   Bug 2:
-//   Bug 3:
-//   Bug 4:
+//   Bug 1: line 16, addition starts from the second element, change initial value of i to 0
+//   Bug 2: line 24, sum_array has an error, fix sum_array first
+//   Bug 2.1: line 21, not checking for n = 0, add error handling for n = 0
+//   Bug 3: line 25, not dealing with case "n = 0", announce that there is no max value.
+//   Bug 3.1: line 27 - 30, not dealing with an array of negatives, change initial value to the first element and start the loop from the second element
+//   Bug 4: line 35 - 39, reversing 2 times (changing the string back to the original string), process to half of the string
 #include <stdio.h>
 
 #define N 5

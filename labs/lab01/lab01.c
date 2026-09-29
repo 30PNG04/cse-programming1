@@ -25,7 +25,7 @@ int add(int a, int b) {
 
 // 1.2 Sum of the digits of n (n may be negative: sum_digits(-12) = 3)
 int sum_digits(int n) {
-    if (n < 0) n = -n;
+    n = n < 0 ? -n : n;
     if (n == 0) return 0;
     /*
     int buf = 0;
@@ -106,7 +106,6 @@ int days_in_month(int month, int year) {
         case 2:
             if (is_leap_year(year)) return 29;
             else return 28;
-
         default:
             return 0;
     }

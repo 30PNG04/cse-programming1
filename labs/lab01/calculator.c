@@ -77,7 +77,7 @@ float pow(float a, float b) {
     
     int power;
     for (power = (int) b; power != 0; power /= 2) {
-        if (power % 2) result *= buf;
+        result *= power % 2 ? buf : 1;
         buf *= buf;
     }
 

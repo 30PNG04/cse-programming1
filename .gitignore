@@ -76,6 +76,7 @@ labs/lab01/temperature
 labs/lab01/calculator
 labs/lab02/lab02
 labs/lab02/buggy
+labs/lab02/buggy_fixed
 labs/lab03/lab03
 labs/lab03/leaky
 labs/lab04/test_student
@@ -83,3 +84,4 @@ labs/lab04/app
 
 # Personal VS Code settings
 .vscode/
+labs/lab02/my_atoi
