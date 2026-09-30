@@ -85,3 +85,4 @@ labs/lab04/app
 # Personal VS Code settings
 .vscode/
 labs/lab02/my_atoi
+labs/lab02/char_count
