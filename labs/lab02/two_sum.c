@@ -5,17 +5,6 @@ static int passed = 0, total = 0;
 
 #define RESULT_SIZE 2
 
-#define CHECK(expr)                                 \
-    do {                                            \
-        total++;                                    \
-        if (expr) {                                 \
-            passed++;                               \
-            printf("  PASS  %s\n", #expr);          \
-        } else {                                    \
-            printf("  FAIL  %s\n", #expr);          \
-        }                                           \
-    } while (0)
-
 static int ResultCheck(const int a[], const int b[]);
 
 void twoSum(const int nums[], int n, int target, int result[]);
@@ -48,7 +37,7 @@ int main(void)
         {num3,  3,  6,  {1, 2}},
 
         /* Negative + positive */
-        {num4,  4,  1,  {0, 2}},
+        {num4,  4,  0,  {0, 2}},
         {num6,  5,  2,  {0, 4}},
         {num9,  5,  0,  {0, 4}},
 
@@ -69,6 +58,8 @@ int main(void)
         {NULL, 0, 0, {-1, -1}}
     };
 
+    total = sizeof(test) / sizeof(struct Test) - 1;
+
     struct Test *i = test;
     for (; i->nums != NULL; i++) {
         int result[RESULT_SIZE] = {-1, -1};
@@ -77,6 +68,7 @@ int main(void)
         int flag = ResultCheck(result, i->result);
         if (flag) {
             printf("  PASS  ");
+            passed++;
         } else printf("  FAIL  ");
 
         printf("{");
@@ -87,6 +79,8 @@ int main(void)
         if (!flag) printf(" EXPECTED [%d, %d]", i->result[0], i->result[1]);
         printf("\n");
     }
+
+    printf("PASS %d/%d\n", passed, total);
 
     return !(passed == total);
 }
