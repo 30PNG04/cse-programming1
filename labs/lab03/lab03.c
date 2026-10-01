@@ -34,43 +34,80 @@ static int same_array(const int *a, const int *b, int n) {
 // 3.1 Swap the values of two variables
 void swap(int *a, int *b) {
     // TODO
-    (void)a; (void)b;
+    *a ^= *b;
+    *b ^= *a;
+    *a ^= *b;
 }
 
 // 3.2 Find the min and max of the array (n >= 1), returned through pointers
 void min_max(const int *a, int n, int *min, int *max) {
     // TODO
-    (void)a; (void)n; (void)min; (void)max;
+    int buf_min = *a, buf_max = *a;
+
+    for(int i = 1; i < n; i++) {
+        if (*(a+i) < buf_min) buf_min = *(a+i);
+        if (*(a+i) > buf_max) buf_max = *(a+i);
+    }
+
+    *min = buf_min, *max = buf_max;
 }
 
 // 3.3 Sum of the array. Do NOT use a[i]; use only *p and p++ (or *(a + i))
 int sum_pointer(const int *a, int n) {
     // TODO
-    (void)a; (void)n;
-    return -1;
+    int buf = 0;
+    for (int i = 0; i < n; i++) 
+        buf += *(a + i);
+
+    return buf;
 }
 
 // 3.4 Return a copy of the array, allocated on the heap (the caller will free it)
 int *copy_array(const int *a, int n) {
     // TODO: malloc(n * sizeof(int)), check for NULL, copy each element
-    (void)a; (void)n;
-    return NULL;
+    int *buf = malloc(n * sizeof(int));
+    if (buf == NULL) {
+        perror("copy_array: malloc");
+        return NULL;
+    }
+    memcpy(buf, a, n * sizeof(*buf));
+    return buf;
 }
 
 // 3.5 Return a new array containing only the even numbers of a (in the same order).
 //     Store the number of elements of the result in *returnSize.
 int *filter_even(const int *a, int n, int *returnSize) {
     // TODO
-    (void)a; (void)n;
-    *returnSize = 0;
-    return NULL;
+    int *buf = malloc(n * sizeof(int));
+    if (!buf) {
+        perror("filter_even: malloc");
+        return NULL;
+    }
+
+    int i = 0, j = 0;
+    for (; i < n; i++) {
+        int tmp = *(a + i);
+        if (!(tmp % 2)) {
+            *(buf + j) = tmp;
+            j++;
+        }
+    }
+
+    *returnSize = j;
+    return realloc(buf, j * sizeof(int));
 }
 
 // 3.6 Implement strdup yourself: return a heap copy of the string s
 char *my_strdup(const char *s) {
-    // TODO: count the length, malloc(length + 1) - why +1?
-    (void)s;
-    return NULL;
+    unsigned int mem_len = strlen(s) + 1;
+    char *buf = malloc(mem_len);
+    if (!buf) {
+        perror("my_strdup: malloc");
+        return NULL;
+    }
+
+    memcpy(buf, s, mem_len * sizeof(*buf));
+    return buf;
 }
 
 // 3.7 Append value to the end of the dynamic array arr.
@@ -80,28 +117,69 @@ char *my_strdup(const char *s) {
 //     Return a pointer to the array (it may have changed after realloc).
 int *push_back(int *arr, int *size, int *capacity, int value) {
     // TODO
-    (void)size; (void)capacity; (void)value;
+    if (*capacity == 0)
+        *capacity = 1;
+    else if (*size == *capacity)
+        *capacity *= 2;
+
+    int *tmp = realloc(arr, *capacity * sizeof(*arr));
+    
+    if (!tmp) {
+        perror("push_back: realloc");
+        return NULL;
+    }
+
+    arr = tmp;
+
+    *(arr + (*size)++) = value;
     return arr;
 }
 
 // 3.8 Allocate a rows x cols matrix as int ** (Lecture 7), initialized to all 0
 int **alloc_matrix(int rows, int cols) {
     // TODO: 1 malloc for the array of row pointers + rows calls to calloc, one per row
-    (void)rows; (void)cols;
-    return NULL;
+    int **buf = malloc(rows * sizeof(*buf));
+    if (!buf) {
+        perror("alloc_matrix: malloc");
+        return NULL;
+    }
+
+    for (int i = 0; i < rows; i++) {
+        *(buf + i) = calloc(cols, sizeof(**buf));
+
+        if (!*(buf + i)) {
+            perror("alloc_matrix: calloc");
+            for (int j = 0; j < i; j++)
+                free(*(buf + j));
+
+            free(buf);
+            return NULL;
+        }
+        
+    }
+
+    return buf;
 }
 
 // 3.8 Free the matrix: each row first, then the array of pointers
 void free_matrix(int **m, int rows) {
-    // TODO
-    (void)m; (void)rows;
+    for (int i = 0; i < rows; i++)
+        free(*(m + i));
+    
+    free(m);
 }
 
 // 3.9 Allocate an int on the heap, set it to value, and "return" it through parameter p
 //     (fixes the bug in out-of-scope-allocation_1.c)
 void allocate_int(int **p, int value) {
     // TODO
-    (void)p; (void)value;
+    *p = malloc(sizeof(int));
+    if (*p == NULL) {
+        perror("allocate_int: malloc");
+        return;
+    }
+
+    **p = value;
 }
 
 int main() {
