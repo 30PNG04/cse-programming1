@@ -5,10 +5,10 @@
 // Fix all the bugs until valgrind reports: 0 errors, no leaks.
 //
 // Record the bugs you find:
-//   Bug 1: line ..., valgrind reports ..., fix ...
-//   Bug 2:
-//   Bug 3:
-//   Bug 4:
+//   Bug 1: line 19, valgrind reports invalid access to memory outside of "name"'s alloc'd mem, fix line 17: ...malloc(strlen(s) + 1);
+//   Bug 2: line 27, valgrind reports reading an uninitialised value, fix line 26: ...int i = 0...
+//   Bug 3: line 43, valgrind reports invalid access to memory after freeing memory, fix swap line 42 and 43
+//   Bug 4: line 32, valgrind reports memory leak, add free(name) 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

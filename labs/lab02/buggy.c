@@ -3,7 +3,7 @@
 // Use gdb or VS Code (breakpoints, step, watch) to find them; do NOT add printf.
 //
 // Record the bugs you find:
-//   Bug 1: line 16, addition starts from the second element, change initial value of i to 0
+//   Bug 1: line 19, addition starts from the second element, change initial value of i to 0
 //   Bug 2: line 24, sum_array has an error, fix sum_array first
 //   Bug 2.1: line 21, not checking for n = 0, add error handling for n = 0
 //   Bug 3: line 25, not dealing with case "n = 0", announce that there is no max value.
