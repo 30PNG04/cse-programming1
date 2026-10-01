@@ -53,20 +53,7 @@ int* sortedSquares(int* nums, int numsSize, int* returnSize) {
         *(nums + i) *= *(nums + i);
     }
 
-    int flag = 0;
-
-    do {
-        flag = 0;
-        for (i = 0; i < numsSize - 1; i++) {
-            if (nums[i] > nums[i + 1]) {
-                flag = 1;
-                nums[i] ^= nums[i + 1];
-                nums[i + 1] ^= nums[i];
-                nums[i] ^= nums[i + 1];
-            }
-        }
-    } while (flag);
-
+    merge_sort(nums, numsSize);
     return nums;
 }
 
@@ -83,4 +70,46 @@ void merge(int* nums1, int nums1Size, int m, int* nums2, int nums2Size, int n) {
 
     for(; k >= 0; i--, k--)
         nums1[i] = nums2[k];
+}
+
+void merge_sort(int *arr, int n) {
+    if (n <= 1) return;
+    
+    int *buf, n1, n2;
+
+    if (n == 2) {
+        if (arr[0] > arr[1]) {
+            arr[0] ^= arr[1];
+            arr[1] ^= arr[0];
+            arr[0] ^= arr[1];
+        }
+        return;
+    } else {
+        n2 = n / 2, n1 = n - n2;
+        merge_sort(arr, n1);
+        buf = malloc(n2 * sizeof(*arr));
+
+        if (buf == NULL) {
+            perror("merge_sort: malloc");
+            return;
+        }
+
+        memcpy(buf, arr + n1, n2 * sizeof(*arr));
+        merge_sort(buf, n2);
+    }
+
+    n1--; n2--; n--;
+    for (;n1 >= 0 && n2 >= 0; n--) {
+        if (arr[n1] > buf[n2]) {
+            arr[n] = arr[n1--];
+        } else {
+            arr[n] = buf[n2--];
+        }
+    }
+
+    for (;n2 >= 0; n--, n2--) {
+        arr[n] = buf[n2];
+    }
+
+    free(buf);
 }
