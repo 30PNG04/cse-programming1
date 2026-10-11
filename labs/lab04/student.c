@@ -223,7 +223,7 @@ Node *load_csv(const char *filename) {
 }
 
 /*Re-implement for binary tree*/
-Node *tree_add (Node_t *tree, Student s) {
+Node_t *tree_add (Node_t *tree, Student s) {
     Node_t *node = calloc(1, sizeof(*node));
     Node_t **buf = &tree;
     if (node == NULL) {
@@ -245,27 +245,23 @@ Node *tree_add (Node_t *tree, Student s) {
 }
 
 // Number of elements
-int tree_length(const Node_t *tree) {
-    int count= 0;
-    if(tree != NULL) count++;
-    tree_length_re(tree->left, &count);
-    tree_length_re(tree->right, &count);
-    return count;
-}
+int tree_size(const Node_t *tree) {
+    int count = 0;
+    if(tree != NULL) {
+        count++;
+        count += tree_length(tree->left);
+        count += tree_length(tree->right);
+    }
 
-int tree_length_re(const Node_t *tree, int *count) {
-    if(tree != NULL) (*count)++;
-    tree_length_re(tree->left, &count);
-    tree_length_re(tree->right, &count);
     return count;
 }
 
 // Find by id; return a pointer to the Student in the list (so it can be modified), or NULL
 Student *tree_find(Node_t *tree, int id) {
-    if (tree == NULL) return NULL;
+    if(tree == NULL) return NULL;
 
     Student *p;
-    if (tree->data.id == id) {
+    if(tree->data.id == id) {
         p = &(tree->data);
         return p;
     } else if ((p = tree_find(tree->right, id)) == NULL) {
@@ -277,49 +273,52 @@ Student *tree_find(Node_t *tree, int id) {
 
 // Remove the first node with the matching id (remember to free it), return the new head.
 // If the id is not found, leave the list unchanged.
-Node *tree_remove(Node *head, int id) {
-    if(head == NULL) return NULL;
 
-    if (head->data.id == id) {
-        Node *tmp = head->next;
-        free(head);
-        return tmp;
-    }
+Node_t *tree_remove(Node_t *tree, int id) {
+    if(tree == NULL) return NULL;
 
-    Node *buf = head;
-    
-    do {
-        if (buf->next->data.id == id) {
-            Node *tmp = buf->next;
-            buf->next = buf->next->next;
-            
-            free(tmp);
-            break;
+    Node_t *buf = NULL;
+    if(tree->data.id == id) {
+        Node_t *tmp = tree->right;
+
+
+        buf = tree->left;
+
+        if(buf == NULL) {
+            free(tree);
+            return tmp;
         }
 
-        buf = buf->next;
-    } while (buf->next != NULL);
+        while (buf->right != NULL) buf = buf->right;
+        buf->right = tmp;
 
-    return head;
+        free(tree);
+        return buf;
+    } else if (id < tree->data.id) tree->left = tree_remove(tree->left, id);
+    else tree->right = tree_remove(tree->right, id);
+
+    return tree;
 }
 
 // Print the whole list
-void list_print(const Node *head) {
-    for (const Node *p = head; p != NULL; p = p->next)
-        print_student(&p->data);
+void tree_print(const Node_t *tree) {
+    if(tree == NULL) return;
+    print_student(&(tree->data));
+    tree_print(tree->left);
+    tree_print(tree->right);
 }
 
 // Free the whole list
-void list_free(Node *head) {
-    while (head != NULL) {
-        Node *tmp = head->next;
-        free(head);
-        head = tmp;
-    }
+void tree_free(Node_t *tree) {
+    if(tree == NULL) return;
+    tree_free(tree->left);
+    tree_free(tree->right);
+    free(tree);
 }
 
-int list_to_array(const Node *head, Student out[], int max) {
-    if (head == NULL) return 0;
+//TODO continue
+int list_to_array(const Node_t *tree, Student out[], int max) {
+    if (tree == NULL) return 0;
 
     int i = 0;
     for (; i < max && head != NULL; i++) {
