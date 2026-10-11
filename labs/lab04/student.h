@@ -27,6 +27,12 @@ typedef struct Node {
     struct Node *next;
 } Node;
 
+typedef struct Node_t {
+    Student data;
+    struct Node_t *left;
+    struct Node_t *right;
+} Node_t;
+
 // Function pointer type for comparison (same signature as qsort's comparator)
 typedef int (*StudentCompare)(const void *, const void *);
 
@@ -55,5 +61,8 @@ int list_to_array(const Node *head, Student out[], int max);
 void sort_students(Student arr[], int n, StudentCompare cmp);
 int is_excellent(const Student *s);
 int count_if(const Node *head, StudentPredicate pred);
+
+int save_csv(const Node *head, const char *filename);
+Node *load_csv(const char *filename);
 
 #endif
