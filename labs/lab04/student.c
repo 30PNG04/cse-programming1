@@ -309,44 +309,31 @@ void tree_free(Node_t *tree) {
     free(tree);
 }
 
-//TODO continue
 int tree_to_array(const Node_t *tree, Student out[], int max) {
-    if (tree == NULL) return 0;
+    if (tree == NULL && max <= 0) return 0;
 
     int i = 0;
+    int j = 0;
 
-    j_max += 
+    int j_max = tree_size(tree->left);
 
-    while (i < max) {
-        int j = 0;
-        int j_max = tree_size(tree->left);
-        Student *p = tree_to_array_re(tree->left, j_max);
-        for (; j < j_max && i < max; j++, i++) out[i] = p[j];
+    if(j_max > 0) {
+        Student buf[j_max];
+        tree_to_array(tree->left, buf, j_max);
 
-        out[i++] = tree->data;
+        for (; j < j_max && i < max; j++, i++) out[i] = buf[j];
+    }
 
-        j_max = tree_size(tree->right);
-        p = tree_to_array_re(tree->right, j_max);
-        for (j = 0; j < j_max && i < max; j++, i++) out[i] = p[j];
+    if (i < max) out[i++] = tree->data;
+
+    j_max = tree_size(tree->right);
+    if(j_max > 0 && i < max) {
+        Student buf[j_max];
+        tree_to_array_re(tree->right, buf, j_max);
+        for (j = 0; j < j_max && i < max; j++, i++) out[i] = buf[j];
     }
 
     return i;
-}
-
-Student *tree_to_array_re(const Node_t *tree, int max) {
-    int i = 0;
-    while (i < max) {
-        int j = 0;
-        int j_max = tree_size(tree->left);
-        Student *p = tree_to_array_re(tree->left, j_max);
-        for (; j < j_max && i < max; j++, i++) out[i] = p[j];
-
-        out[i++] = tree->data;
-
-        j_max = tree_size(tree->right);
-        p = tree_to_array_re(tree->right, j_max);
-        for (j = 0; j < j_max && i < max; j++, i++) out[i] = p[j];
-    }
 }
 
 int count_if(const Node *head, StudentPredicate pred) {
