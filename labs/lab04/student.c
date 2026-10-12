@@ -336,25 +336,35 @@ int tree_to_array(const Node_t *tree, Student out[], int max) {
     return i;
 }
 
-int count_if(const Node *head, StudentPredicate pred) {
+int tree_count_if(const Node_t *tree, StudentPredicate pred) {
     int i = 0;
-    while (head != NULL) {
-        i += pred(&(head->data));
-        head = head->next;
+
+    if (tree != NULL) {
+        i += pred(&(tree->data));
+        i += count_if(tree->left, pred);
+        i += count_if(tree->right, pred);
     }
 
     return i;
 }
 
-int save_csv(const Node *head, const char *filename) {
+int tree_save_csv(const Node_t *tree, const char *filename) {
     FILE *file = fopen(filename, "w");
     if (file == NULL) return 0;
 
-    while (head != NULL) {
-        fprintf(file, "%d,%s,%0.2f\n", head->data.id, head->data.name, head->data.gpa);
-        head = head->next;
-    }
+    tree_save_csv_re(tree, file);
 
     fclose(file);
     return 1;
 }
+
+static void tree_save_csv_re(const Node_t *tree, FILE *file) {
+    if(tree == NULL) return;
+    tree_save_csv(tree->left, file);
+
+    fprintf(file, "%d,%s,%0.2f\n", tree->data.id, tree->data.name, tree->data.gpa);
+
+    tree_save_csv(tree->right, file);
+}
+
+//TODO test the binary tree
